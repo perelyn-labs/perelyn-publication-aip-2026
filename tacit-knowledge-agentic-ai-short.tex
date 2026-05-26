@@ -1,0 +1,565 @@
+% Third Workshop on AI in Production @ IJCAI 2026
+% CEUR-WS format — Short/Position Paper (5 pages)
+\documentclass[]{ceurart}
+
+\sloppy
+
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+\begin{document}
+
+\copyrightyear{2026}
+\copyrightclause{Copyright for this paper by its authors.
+  Use permitted under Creative Commons License Attribution 4.0
+  International (CC BY 4.0).}
+
+\conference{Third Workshop on AI in Production, co-located with
+  IJCAI 2026, August 11, 2026, Bremen, Germany}
+
+\title{From Documentation to Knowledge Vessels:\\Agentic AI for Tacit
+  Knowledge Preservation in Manufacturing}
+
+\author{Michael Banf}[%
+  email=michael.banf@perelyn.com,
+]
+\cormark[1]
+\author{Johannes Kuhn}[%
+  email=johannes.kuhn@perelyn.com,
+]
+\author{Max Becker}[%
+  email=slawomir.garcarz@perelyn.com,
+]
+\author{Sebastian Fetz}[%
+  email=max.becker@perelyn.com,
+]
+
+\address{Perelyn GmbH, Munich, Germany}
+
+\cortext[1]{Corresponding author.}
+
+\begin{abstract}
+Manufacturing faces an unprecedented knowledge crisis: 70\% of critical
+operational expertise is undocumented and resides in aging workers'
+heads. Current AI-based knowledge capture treats this as a
+\emph{documentation problem}---extracting expertise into static SOPs,
+knowledge graphs, or video tutorials. We argue it should be reframed as
+an \emph{agent memory problem}. Drawing on a landscape analysis of 17+
+commercial platforms and the agentic memory literature, we identify a
+critical \emph{episodic-temporal gap}: no existing system captures the
+situated, evolving, episode-grounded nature of expert knowledge. We
+propose a three-stage framework---\textsc{Capture},
+\textsc{Organize}, \textsc{Transfer}---in which agentic AI orchestrates
+multimodal, minimally invasive knowledge ingestion, structures it into
+temporally versioned memory stores, and delivers it contextually to new
+workers as persistent \emph{knowledge vessels} that absorb, evolve, and
+transfer expertise across workforce generations.
+\end{abstract}
+
+\begin{keywords}
+  Tacit knowledge \sep
+  Manufacturing \sep
+  Agentic AI \sep
+  Knowledge preservation \sep
+  Agent memory \sep
+  LLM agents \sep
+  Multimodal capture
+\end{keywords}
+
+\maketitle
+
+%%% ==================================================================
+\section{Introduction}\label{sec:intro}
+%%% ==================================================================
+
+The manufacturing sector confronts a structural knowledge crisis driven
+by workforce demographics. In the United States, 52.4\% of the
+industrial products workforce is expected to retire or depart within
+five years~\cite{apqc2025}, creating an estimated 2.8~million
+retirement-driven vacancies by 2033~\cite{deloitte2024}. The average age
+in small manufacturing shops approaches~55, with ownership often in
+their 60s~\cite{edwards2026}. Each retiring technician with 20+ years of
+experience takes approximately \$800K--\$1.2M in undocumented
+troubleshooting knowledge~\cite{dovient2025}. \emph{Fortune} warned in
+January 2026 that ``there are an estimated 1--2 years left to capture
+decades of industrial knowledge''~\cite{fortune2026}.
+
+An estimated 70\% of critical manufacturing knowledge is never
+formalized~\cite{egain2025}, and knowledge transfer failures cost large
+manufacturers \$47~million per year~\cite{panopto2023}. When tribal
+knowledge is lost, repair times increase 3--4$\times$ and new-hire
+ramp-up extends from 3--4 months to
+8--12~months~\cite{dovient2025}.
+
+A rapidly growing ecosystem of commercial platforms and academic
+prototypes has emerged (Section~\ref{sec:landscape}). Yet virtually all
+treat tacit knowledge preservation as a \emph{documentation problem}:
+conduct interviews, record SOPs, transcribe video---and store results as
+static artifacts. This framing discards the very qualities that make
+expert knowledge valuable: its situatedness, temporal evolution, and
+episode-grounded nature.
+
+We propose reframing tacit knowledge preservation as an \emph{agent
+memory problem}. Recent surveys reveal that all major agent harnesses
+lack episodic memory and temporal
+versioning~\cite{banf2026memory}---precisely the qualities that make
+expert knowledge valuable. We present a three-stage framework
+(\textsc{Capture}--\textsc{Organize}--\textsc{Transfer}) in which
+agentic AI systems serve as persistent \emph{knowledge vessels} that
+incrementally absorb, structure, and deliver expertise long after the
+original expert has retired.
+
+%%% ==================================================================
+\section{Current Landscape}\label{sec:landscape}
+%%% ==================================================================
+
+We surveyed the current landscape of AI-based tacit knowledge
+preservation in manufacturing across three categories: commercial
+platforms, academic prototypes, and industry initiatives
+(Table~\ref{tab:landscape}).
+
+\paragraph{Commercial platforms.}
+At least 17 commercial products now target manufacturing knowledge
+capture, from dedicated startups---Dovient (multimodal capture, reducing
+diagnosis time from 25~min to 90~sec), Murray Mentor (voice-first
+in-ear guidance), Blockbrain (Stuttgart; Knowledge Bots for Bosch and
+K\"archer)---to mature connected-worker platforms (Augmentir, MaintainX,
+Poka with 2{,}300+ customers) and enterprise vendors (Siemens'
+Industrial Foundation Model trained on 150~PB, SAP's ``Company Memory''
+context graph, IBM Maximo~9.1 with watsonx.ai).
+
+\paragraph{Academic prototypes.}
+On the research side, Kernan Freire et al.\ deployed an LLM-based
+knowledge-sharing system in real factories, finding that workers
+perceived clear benefits but \emph{still preferred learning from a human
+expert when available}~\cite{freire2024}---a result we consider central
+to system design. Zuin et al.\ built an LLM agent that iteratively
+interviews employees to reconstruct organizational knowledge, achieving
+94.9\% full-knowledge recall in simulation~\cite{zuin2025}.
+Radhakrishnan demonstrated a conversational AI (Gemini~2.5 Pro) that
+converts tacit process knowledge into BPMN diagrams within a 12-minute
+session at SME-friendly API costs~\cite{radhakrishnan2025}.
+
+\paragraph{Funded initiatives.}
+The EU Horizon project COGNIMAN develops cognitive digital twins
+integrating memory, perception, and reasoning~\cite{cogniman2025}.
+Fraunhofer IESE has deployed dialogue-based AI assistants for knowledge
+capture in pump manufacturing, crane systems, and switch cabinet
+construction. The BMBF-funded KI\_eeper project built a multimodal
+system for automatic expert knowledge capture in SMEs, finding that 80\%
+of business-relevant knowledge remains undocumented~\cite{kieeper2025}.
+Yet none of these projects implements episodic memory or temporal
+versioning. Notably, Horizon Europe's 2027 work programme now explicitly
+calls for systems that ``capture and formalise the knowledge which is
+dispersed and not explicit''~\cite{horizon2027}---acknowledging that
+despite over a decade of EU funding, the problem remains unsolved.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/tacit-landscape-table.png}
+\caption{Feature matrix of knowledge capture approaches assessed against
+  five memory capabilities derived from the CoALA
+  taxonomy~\cite{sumers2024coala}.
+  No surveyed system achieves more than two of five
+  capabilities.}\label{tab:landscape}
+\end{figure}
+
+\paragraph{The common blind spot.}
+Table~\ref{tab:landscape} formalizes the assessment across five memory
+capabilities derived from the CoALA taxonomy~\cite{sumers2024coala} and
+the bi-temporal model~\cite{rasmussen2025}. Despite the breadth of the
+ecosystem, \emph{no} surveyed system achieves more than two of five
+capabilities: voice/video platforms capture procedures but discard
+context; agentic systems seek knowledge actively but store it as flat
+artifacts; cognitive digital twins track machine state evolution but not
+human expertise. Most critically, none implements episodic memory with
+temporal versioning or consolidation of episodes into generalized
+knowledge. This mirrors the \emph{episodic-temporal paradox} in the
+broader agentic memory literature: 59\% of recent research papers
+address episodic memory conceptually but only 4\% implement temporal
+mechanisms beyond timestamps~\cite{banf2026memory}.
+
+%%% ==================================================================
+\section{Framework: Capture--Organize--Transfer}\label{sec:framework}
+%%% ==================================================================
+
+We propose a three-stage framework (Figure~\ref{fig:pipeline}) in which
+agentic AI orchestrates tacit knowledge preservation as a continuous,
+minimally invasive process rather than a one-time documentation effort.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/tacit-pipeline.png}
+\caption{The \textsc{Capture--Organize--Transfer} framework. A
+  feedback loop enables the agent to refine its knowledge continuously
+  from new worker interactions.}\label{fig:pipeline}
+\end{figure}
+
+\subsection{Stage 1: Capture---Minimally Invasive Multimodal
+  Ingestion}\label{sec:capture}
+
+A core design principle is \emph{minimal invasiveness}: experts are
+scarce, busy, and cannot be pulled from the production floor for lengthy
+knowledge-engineering sessions. The agentic system must capture
+knowledge \emph{while experts work}, combining multiple modalities:
+
+We identify an \emph{invasiveness spectrum} ranging from fully passive
+to lightly interactive, each targeting different knowledge layers:
+
+\begin{itemize}
+\item \textbf{Passive process mining (zero worker effort).}
+  Existing machine logs, shift records, and maintenance tickets contain
+  latent expert knowledge. Eschbach's Shiftconnector mines years of
+  accumulated shift logs to surface tacit patterns retroactively.
+  Explainable ML pipelines can differentiate expert from novice behavior
+  from process data alone with {>}90\% accuracy, requiring no worker
+  instrumentation~\cite{explainableml2024}. This layer captures
+  \emph{what} experts do differently, but not \emph{why}.
+
+\item \textbf{Ambient observation (no behavior change).} Computer
+  vision monitors expert actions during normal production; wearable eye
+  trackers reveal visual attention strategies that experts cannot
+  verbalize. Denso deployed Tobii eye-tracking glasses on inspectors,
+  uncovering gaze patterns that explained exceptional quality and halving
+  training time~\cite{tobii2025}. This layer captures embodied knowledge
+  that resists articulation---a partial answer to Polanyi's paradox.
+
+\item \textbf{Agentic micro-interviews (brief, contextual).} Rather
+  than lengthy sessions, the agent conducts brief elicitation at natural
+  pause points---shift changes, after anomaly resolution, or during
+  routine checks. The Bosch Shopfloor Agent, deployed at Bosch Bamberg,
+  uses a multi-agent system with voice interaction to diagnose root
+  causes from historical data, saving {\texteuro}850K per plant
+  annually~\cite{bosch2025}. Crucially, the agent \emph{asks} rather
+  than only \emph{answers}~\cite{najjar2025}, proactively filling
+  knowledge gaps.
+
+\item \textbf{Retroactive synthesis.} The system continuously ingests
+  shift handoff notes, chat messages, and informal documentation---what
+  Uchihira~\cite{uchihira2026} calls ``digital fragmented
+  knowledge''---and links expert actions to contemporaneous sensor data,
+  capturing the physical context that triggered intervention.
+\end{itemize}
+
+The key distinction from existing approaches is that the capture agent
+operates \emph{autonomously and continuously} across all layers,
+identifying what it does not know and opportunistically filling
+gaps---rather than relying on scheduled documentation sessions.
+
+\subsection{Stage 2: Organize---Temporally Versioned Structured
+  Memory}\label{sec:organize}
+
+Following the cognitive memory taxonomy~\cite{sumers2024coala}, captured
+knowledge is organized into three interconnected, temporally versioned
+stores (Table~\ref{tab:memory-arch}).
+
+\paragraph{Episodic memory} stores specific situated events with full
+context: who acted, what happened, when and where, what machine state
+triggered the intervention, and what the outcome was. Each episode is
+represented as a structured node carrying the tuple
+$\langle$\textit{trigger, context, action, outcome, actor,
+timestamp}$\rangle$, linked to contemporaneous sensor snapshots and
+machine state vectors. This is the layer most critically absent from
+current systems: no surveyed platform stores the situated event ``bearing
+on Press~7 failed after weekend shutdown in high humidity---senior
+technician diagnosed misalignment, not wear'' as a retrievable,
+contextually grounded episode. Architecturally, episodic stores require
+graph-based representations where episodes connect to equipment nodes,
+personnel, and environmental conditions---flat vector stores cannot
+represent the relational structure of situated
+events~\cite{graphmemsurvey2026}.
+
+\paragraph{Semantic memory} consolidates abstracted knowledge into a
+manufacturing knowledge graph grounded in domain ontologies (e.g.,
+ISA-95 for process hierarchies, ISO~14224 for failure
+classification). Nodes represent equipment, materials, failure modes, and
+causal relationships; edges encode dependencies (``polymer~X requires
+pressure $\leq$3.8\,bar'') and constraints. Crucially, semantic
+nodes are \emph{derived from} episodic evidence: the generalization
+``weekend shutdowns increase bearing misalignment risk on hydraulic
+presses'' emerges only after multiple episodes are consolidated.
+This episodic-to-semantic consolidation mirrors how human experts build
+intuition from accumulated experience~\cite{gam2026}.
+
+\paragraph{Procedural memory} encodes \emph{how} to perform tasks as
+step sequences, decision trees, and conditional heuristics---including
+experts' rules of thumb that deviate from official SOPs. Each procedure
+carries version metadata and links to the episodic evidence from which
+it was derived: ``Step~3 was added after the incident on 2024-03-15
+(Episode~\#247).'' This provenance chain means procedures are not
+opaque prescriptions but \emph{auditable, traceable} instructions whose
+rationale can be inspected---a requirement for safety-critical
+manufacturing and EU AI Act compliance.
+
+\paragraph{Bi-temporal versioning.}
+All three stores must be \textbf{temporally versioned} using a
+bi-temporal model~\cite{rasmussen2025} that distinguishes \emph{event
+time} (when something happened on the shop floor) from \emph{ingestion
+time} (when the system learned it). Every knowledge edge carries an
+explicit validity interval $[t_{\mathrm{valid\_from}},\,
+t_{\mathrm{valid\_to}})$. When a material substitution changes process
+parameters, the old edge is closed and a new one opened---preserving the
+full history. This enables temporal queries that no current system
+supports: ``What was the recommended pressure \emph{before} the polymer
+switch in March 2024?'' or ``When did we first learn that humidity
+affects bearing alignment?''
+
+\paragraph{Consolidation loop.}
+A periodic consolidation process promotes recurring patterns from
+episodic to semantic memory and distills validated action sequences into
+procedural memory, while retaining the source episodes as provenance.
+This mirrors the hierarchical consolidation formalized in recent memory
+theory~\cite{timem2026}: raw episodes are never discarded, but
+increasingly abstract representations are layered on top, enabling
+retrieval at the appropriate granularity---from a specific incident
+(episodic) to a general principle (semantic) to an executable procedure
+(procedural).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/tacit-memory-arch-table.png}
+\caption{Architectural mapping: memory types, manufacturing knowledge,
+  and realization. Each store is temporally versioned with bi-temporal
+  validity intervals~\cite{rasmussen2025,memp2025}.}\label{tab:memory-arch}
+\end{figure}
+
+\subsection{Stage 3: Transfer---Contextual Delivery to New
+  Workers}\label{sec:transfer}
+
+The value of preserved knowledge is realized through effective transfer.
+The agentic system supports three delivery modalities:
+(1)~\textbf{Digital mentoring}---the agent acts as a virtual experienced
+colleague, answering not just ``how'' but ``why'' by retrieving relevant
+episodes (``The last time someone saw this vibration on Press\,7 after a
+humid weekend, it was bearing misalignment---here's what the senior
+technician did'');
+(2)~\textbf{Real-time guidance}---in-ear or on-screen support calibrated
+to the worker's experience level, from procedural steps (novices) to
+contextual warnings (intermediates); and
+(3)~\textbf{Scenario-based training}---past episodes recomposed into
+exercises that expose new workers to rare edge cases omitted from
+official materials. Crucially, the feedback loop
+(Figure~\ref{fig:pipeline}) ensures the knowledge vessel \emph{continues
+learning} from new workers' experiences, extending the knowledge base
+beyond what any single expert contributed.
+
+\subsection{Illustrative Walkthrough: Bearing Failure After Material
+  Substitution}\label{sec:walkthrough}
+
+To ground the framework concretely, we trace a representative
+manufacturing scenario through all three stages.
+
+\paragraph{Context.} A hydraulic press (Press\,7) uses polymer seals
+from Supplier\,A with a recommended operating pressure of 4.2\,bar. In
+March~2024, procurement switches to Supplier\,B's polymer, which
+requires lower pressure. Over subsequent months, a senior technician
+discovers through trial and error that 3.8\,bar is optimal, and that
+weekend shutdowns in humid conditions cause bearing misalignment (not
+wear, as the maintenance manual suggests). In September, a partial
+reversion to 4.0\,bar proves necessary due to batch variability. The
+technician retires in December~2024.
+
+\paragraph{Stage~1 (Capture).} The knowledge vessel captures this
+expertise through multiple modalities: (i)~\emph{passive mining}
+detects the pressure parameter change in machine logs and correlates it
+with the supplier switch in procurement records; (ii)~\emph{ambient
+observation} via vibration sensors flags anomalous bearing behavior
+after weekend shutdowns; (iii)~an \emph{agentic micro-interview} at
+shift change---triggered by the anomaly---elicits the technician's
+diagnosis: ``It's misalignment from thermal contraction, not wear.
+Check alignment before you check the bearing.'' None of these modalities
+alone captures the full picture; the agent synthesizes across all three.
+
+\paragraph{Stage~2 (Organize).} The captured knowledge populates all
+three memory stores:
+\emph{Episodic}: three distinct event nodes record the initial failure
+(March), the humidity discovery (July), and the pressure reversion
+(September), each linked to sensor snapshots and the technician's
+explanations.
+\emph{Semantic}: the knowledge graph gains edges
+\texttt{Polymer\,B}~$\xrightarrow{\text{requires}}$~\texttt{${\leq}$3.8\,bar}
+with validity $[\text{Mar\,2024},\,\text{Sep\,2024})$ and
+\texttt{Polymer\,B}~$\xrightarrow{\text{requires}}$~\texttt{4.0\,bar}
+from $[\text{Sep\,2024},\,\text{now})$, plus a causal edge
+\texttt{humid\_weekend}~$\xrightarrow{\text{causes}}$~\texttt{bearing\_misalignment}
+on hydraulic presses.
+\emph{Procedural}: the restart checklist gains a new step: ``After
+weekend shutdown in $>$60\% RH: verify bearing alignment before
+production start (source: Episodes \#247, \#251).''
+
+\paragraph{Stage~3 (Transfer).} Six months after the technician's
+retirement, a new operator encounters unusual vibration on Press\,7
+after a rainy weekend. The knowledge vessel retrieves the relevant
+episodes and provides contextual guidance: ``Similar vibration was
+diagnosed as bearing misalignment (not wear) by [senior technician]
+in July~2024 under similar humidity conditions. Recommended action:
+check alignment per Step~3a of the restart checklist. Historical
+episodes: \#247, \#251.'' The operator follows the procedure, confirms
+misalignment, and resolves the issue in minutes rather than hours. A
+conventional SOP would have directed them to replace the bearing.
+
+This walkthrough illustrates what no current system provides: the
+connection between a situated episode, its temporal context, the
+generalized knowledge derived from it, and the executable procedure
+grounded in that evidence.
+
+%%% ==================================================================
+\section{Discussion: Challenges and Open Questions}\label{sec:discuss}
+%%% ==================================================================
+
+\paragraph{Polanyi's paradox and the limits of capture.}
+Polanyi's observation that ``we can know more than we can
+tell''~\cite{polanyi1966} remains a fundamental constraint. AI can
+capture \emph{expressible} tacit knowledge---heuristics, rules of thumb,
+decision rationales---but deeply embodied knowledge (the ``feel'' of a
+machine vibration) resists formalization. Ambient sensing (eye tracking,
+motion capture) can approximate the physical correlates of embodied skill
+but cannot fully replicate the experience. The framework must be
+transparent about this boundary.
+
+\paragraph{The apprenticeship dilemma.}
+Ide~\cite{ide2026} formalizes a counterintuitive risk: AI systems that
+reduce the need for human mentoring may \emph{weaken} the
+apprenticeship pipeline through which deep tacit knowledge is
+transmitted. Our framework addresses this by positioning the agent as a
+\emph{complement} to human mentoring---consistent with the empirical
+finding that workers prefer human experts when
+available~\cite{freire2024}.
+
+\paragraph{Validation, security, and regulation.}
+In safety-critical manufacturing, incorrect knowledge transfer can cause
+physical harm. Memory poisoning has been identified as a top agentic
+risk, with demonstrated injection rates exceeding
+95\%~\cite{owasp2026}. Concurrently, the EU AI Act (August 2026)
+classifies AI in safety-critical manufacturing as high-risk, mandating
+transparency, human oversight, and tamper-evident audit trails. The
+framework requires validation mechanisms including expert review
+workflows and cross-referencing against sensor data.
+
+\paragraph{SME accessibility.}
+The most acute knowledge concentration risk is in SMEs, where a single
+retirement can eliminate critical capabilities. Lightweight, voice-first
+interfaces---Murray Mentor's in-ear guidance and Radhakrishnan's
+12-minute BPMN capture~\cite{radhakrishnan2025}---demonstrate that
+effective capture need not require heavy IT infrastructure.
+
+%%% ==================================================================
+\section{Conclusion}\label{sec:conclusion}
+%%% ==================================================================
+
+The manufacturing sector's tacit knowledge crisis is urgent, costly,
+and accelerating. While 17+ commercial platforms address knowledge
+capture, the entire field operates within a \emph{documentation
+paradigm} that discards the episodic, temporal, and situated qualities
+that make expert knowledge most valuable. We propose reframing tacit
+knowledge preservation as an agent memory problem and present the
+\textsc{Capture--Organize--Transfer} framework, in which agentic AI
+systems serve as persistent \emph{knowledge vessels}---absorbing
+expertise while experts work, structuring it with episodic--temporal
+grounding, and transferring it contextually to complement human
+mentoring. The gap is actionable: the agentic AI infrastructure and the
+manufacturing knowledge management ecosystem both exist in mature
+form---but have not been connected through an episodic-temporal memory
+architecture. Bridging this gap is both a research opportunity and an
+industrial imperative.
+
+%%% ==================================================================
+%% Bibliography
+%%% ==================================================================
+
+\begin{thebibliography}{30}
+\small
+
+\bibitem{apqc2025} APQC: Knowledge exodus from the silver tsunami in
+  the industrial products sector. Report (2025)
+
+\bibitem{banf2026memory} Banf, M., et al.: Memory-aware software
+  engineering agents: Architectures, mechanisms, and open gaps. AI4SE
+  Workshop @ KI 2026 (2026)
+
+\bibitem{bosch2025} Bosch: Agentic AI in manufacturing
+  production---Shopfloor Agent. Bosch Stories (2025)
+
+\bibitem{cogniman2025} COGNIMAN Consortium: Cognitive digital twin for
+  human-robot collaborative manufacturing. J.\ Intell.\ Manuf.\ (2025)
+
+\bibitem{deloitte2024} Deloitte, NAM: Creating pathways for tomorrow's
+  workforce today. Manufacturing Institute Report (2024)
+
+\bibitem{dovient2025} Dovient: The real cost of tribal knowledge loss
+  in manufacturing. White Paper (2025)
+
+\bibitem{edwards2026} Edwards, K.M., et al.: Agentic AI in engineering
+  and manufacturing. arXiv:2604.09633 (2026)
+
+\bibitem{egain2025} eGain: Capturing tacit knowledge from the great
+  retirement cohort using GenAI. Report (2025)
+
+\bibitem{explainableml2024} Sch\"ott, P., et al.: Automatic generation
+  of insights from workers' actions in manufacturing.
+  arXiv:2406.12732 (2024)
+
+\bibitem{fortune2026} Sharma, K.: Let's train workers on industrial AI,
+  not replace them. Fortune (Jan 2026)
+
+\bibitem{freire2024} Kernan~Freire, S., et al.: Knowledge sharing in
+  manufacturing using LLM-powered tools. Frontiers in AI \textbf{7}
+  (2024)
+
+\bibitem{horizon2027} European Commission: Horizon Europe Work Programme
+  2026--2027, Topic HORIZON-CL4-2027-02-DIGITAL-EMERGING-52: New
+  approaches for Human/AI collaboration (2026)
+
+\bibitem{ide2026} Ide, E.: Automation, AI, and the intergenerational
+  transmission of knowledge. arXiv:2507.16078 (2026)
+
+\bibitem{kieeper2025} Ottersb\"ock, N., et al.\ (eds.):
+  Wissensmanagement mit K\"unstlicher Intelligenz. Springer (2025)
+
+\bibitem{najjar2025} Najjar, R.: From AI-based KM assistant to tacit
+  knowledge agent. 3R Knowledge Services (2025)
+
+\bibitem{owasp2026} OWASP: Agentic security initiative---ASI06: Memory
+  poisoning. OWASP Foundation (2026)
+
+\bibitem{panopto2023} Panopto: Workplace knowledge and productivity
+  report (2023)
+
+\bibitem{polanyi1966} Polanyi, M.: The Tacit Dimension. Univ.\ of
+  Chicago Press (1966)
+
+\bibitem{radhakrishnan2025} Radhakrishnan, U.: Documenting SME processes
+  with conversational AI. arXiv:2512.05122 (2025)
+
+\bibitem{sumers2024coala} Sumers, T.R., et al.: Cognitive architectures
+  for language agents. ICLR (2024)
+
+\bibitem{tobii2025} Tobii: Unlocking hidden skills---eye tracking for
+  workforce training. Tobii Blog (2025)
+
+\bibitem{uchihira2026} Uchihira, N.: Tacit knowledge management with
+  generative AI: The GenAI SECI model. arXiv:2603.21866 (2026)
+
+\bibitem{zuin2025} Zuin, G., et al.: Leveraging LLMs for tacit
+  knowledge discovery. IJCNN (2025)
+
+\bibitem{graphmemsurvey2026} Yang, C., et al.: Graph-based agent
+  memory: A survey. arXiv:2602.05665 (2026)
+
+\bibitem{gam2026} Wu, Z., et al.: GAM: Hierarchical graph memory for
+  LLM-based agents. In: ICLR 2026
+
+\bibitem{rasmussen2025} Rasmussen, P., et al.: Zep: Temporal knowledge
+  graph for agent memory. arXiv:2501.13956 (2025)
+
+\bibitem{timem2026} TiMem: Temporal-hierarchical memory consolidation
+  for language agents. arXiv:2601.02845 (2026)
+
+\bibitem{memp2025} Fang, R., et al.: Mem$^{\mathrm{p}}$: Exploring
+  agent procedural memory. arXiv:2508.06433 (2025)
+
+\end{thebibliography}
+
+\end{document}
