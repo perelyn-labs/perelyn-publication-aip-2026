@@ -8,6 +8,7 @@
 \usepackage{booktabs}
 \usepackage{xcolor}
 \usepackage{graphicx}
+\usepackage{todonotes}
 
 \begin{document}
 
@@ -44,7 +45,9 @@
 Manufacturing faces an unprecedented knowledge crisis: an estimated 70\%
 of critical operational expertise is undocumented and resides in aging
 workers' heads. Current AI-based knowledge capture treats this as a
-\emph{documentation problem}---extracting expertise into static SOPs,
+\emph{documentation problem}---\todo{
+  Was it AI generated? The `---` looks like so, and this can make reviewers unhappy. I wouldn't use it, esp. without any spacing.
+  }extracting expertise into static SOPs\todo{Explain abbreviation at first use} or knowledge graphs. This discards the very\todo{very what?},
 knowledge graphs, or video tutorials. In this position paper, we argue
 for a fundamental reframing: tacit knowledge preservation should be
 understood as an \emph{agent memory problem}. Drawing on a landscape
@@ -123,6 +126,7 @@ and deliver expertise, even long after the original expert has retired.
   No surveyed system achieves more than two of five
   capabilities.}\label{tab:landscape}
 \end{figure}
+\todo{I find Figure \ref{tab:landscape} font hard to read -- maybe we should stick to the style default?}
 
 We sketch a three-stage architecture
 (\textsc{Capture}--\textsc{Organize}--\textsc{Transfer}) and argue that
@@ -493,7 +497,7 @@ healthcare, skilled trades, engineering)?
 We invite the community to engage with these questions and to
 collaboratively shape the research agenda for memory-grounded knowledge
 preservation.
-
+\todo[inline]{Major: I don't think this is correct bibliography style for this template. We should not have any "et al." defined manually. Any reason to not use BibTex?}
 \newpage
 
 %%% ==================================================================
